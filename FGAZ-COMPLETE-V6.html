@@ -158,7 +158,7 @@ body{font-family:Calibri,'Segoe UI',Tahoma,sans-serif;font-size:16px;background:
 .calc-blocked-msg{display:none;padding:.8rem;text-align:center;font-size:.85rem;color:#e74c3c;font-weight:700;background:#fde8e6;border-radius:0 0 10px 10px}
 .calc-blocked .calc-grid,.calc-blocked .calc-screen{filter:blur(3px);pointer-events:none}
 .calc-blocked .calc-blocked-msg{display:block}
-.calc-toggle{position:fixed;bottom:24px;right:16px;width:48px;height:48px;border-radius:50%;background:var(--bleu);color:#fff;border:none;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.2);z-index:97;display:none;transition:all .2s}
+.calc-toggle{position:fixed;bottom:24px;right:16px;width:48px;height:48px;border-radius:50%;background:var(--bleu);color:#fff;border:none;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.2);z-index:97;display:block;transition:all .2s}
 .calc-toggle:hover{transform:scale(1.1)}
 .calc-toggle.blocked{background:#ccc;cursor:not-allowed}
 .res-panel{position:fixed;top:0;right:0;bottom:0;width:360px;background:#fff;box-shadow:-4px 0 20px rgba(0,0,0,.15);z-index:99;transform:translateX(100%);transition:transform .3s ease;overflow-y:auto;padding:1rem}
@@ -436,7 +436,7 @@ body{font-family:Calibri,'Segoe UI',Tahoma,sans-serif;font-size:16px;background:
       <h2>⚡ Symboles Électrotechniques</h2>
       <p style="color:var(--txt2);font-size:.85rem;margin-bottom:1rem">Symboles normés IEC pour schémas électriques — froid & climatisation</p>
       <div class="cat-filters" id="elecCatFilters"></div>
-      <div class="elec-grid" id="elecGrid"></div>
+      <div class="sym-grid" id="elecGrid"></div>
     </div>
     <div class="card" style="padding:.6rem .8rem;display:flex;gap:.3rem;flex-wrap:wrap">
       <button class="btn btn-sm btn-orange" onclick="startElecQuiz()">🎯 Quiz Électro (texte)</button>
@@ -1015,39 +1015,39 @@ const CAT_LABELS={compresseurs:'Compresseurs',echangeurs:'Échangeurs',detendeur
 const CAT_ICONS={compresseurs:'⚙️',echangeurs:'🔄',detendeurs:'🔽',vannes:'🔧',controles:'📡',accessoires:'🔩',reservoirs:'🪣',ventilation:'💨',climatisation:'❄️',securite:'🛡️'};
 
 const ELEC_SYMS=[
-  {id:'e_fusible',n:'Fusible',d:'Protège contre les surintensités par fusion',c:'protection'},
-  {id:'e_sectionneur',n:'Sectionneur',d:'Isoler un circuit sans charge',c:'protection'},
-  {id:'e_disjoncteur',n:'Disjoncteur magnétothermique',d:'Protection surcharge + court-circuit',c:'protection'},
-  {id:'e_disj_moteur',n:'Disjoncteur moteur',d:'Protection magnétothermique réglable pour moteur',c:'protection'},
-  {id:'e_relais_th',n:'Relais thermique',d:'Protection du moteur contre les surcharges (bilame)',c:'protection'},
-  {id:'e_inter_diff',n:'Interrupteur différentiel',d:'Protection des personnes (30mA)',c:'protection'},
-  {id:'e_disj_diff',n:'Disjoncteur différentiel',d:'Protection combinée : surcharge + différentiel',c:'protection'},
-  {id:'e_contacteur',n:'Contacteur (bobine KM)',d:'Appareil de commande à distance par bobine électromagnétique',c:'commande'},
-  {id:'e_contact_no',n:'Contact NO (normalement ouvert)',d:'Se ferme quand la bobine est excitée',c:'commande'},
-  {id:'e_contact_nf',n:'Contact NF (normalement fermé)',d:"S'ouvre quand la bobine est excitée",c:'commande'},
-  {id:'e_bp_marche',n:'Bouton poussoir Marche (NO)',d:'Contact momentané normalement ouvert — S1',c:'commande'},
-  {id:'e_bp_arret',n:'Bouton poussoir Arrêt (NF)',d:'Contact momentané normalement fermé — S0',c:'commande'},
-  {id:'e_selecteur',n:'Sélecteur 2 positions',d:'Commutateur rotatif Auto/Manu',c:'commande'},
-  {id:'e_tempo_travail',n:'Contact temporisé au travail',d:'Fermeture retardée après excitation',c:'commande'},
-  {id:'e_tempo_repos',n:'Contact temporisé au repos',d:'Ouverture retardée après désexcitation',c:'commande'},
-  {id:'e_arret_urgence',n:"Arrêt d'urgence (AU)",d:"Bouton coup de poing à accrochage — coupe tout",c:'commande'},
-  {id:'e_moteur_tri',n:'Moteur asynchrone triphasé',d:'Moteur principal — couplage étoile ou triangle',c:'moteurs'},
-  {id:'e_moteur_mono',n:'Moteur monophasé',d:'Avec condensateur de démarrage ou permanent',c:'moteurs'},
-  {id:'e_motocomp',n:'Motocompresseur hermétique',d:'Moteur + compresseur en carter scellé',c:'moteurs'},
-  {id:'e_motovent',n:'Motoventilateur',d:'Moteur entraînant ventilateur condenseur/évaporateur',c:'moteurs'},
-  {id:'e_transfo',n:'Transformateur',d:'Alimentation circuit de commande (400V→24V)',c:'appareillage'},
-  {id:'e_variateur',n:'Variateur de fréquence',d:'Fait varier la vitesse du moteur (ex: ATV)',c:'appareillage'},
-  {id:'e_resistance',n:'Résistance chauffante',d:'Réchauffeur carter compresseur ou dégivrage',c:'appareillage'},
-  {id:'e_condensateur',n:'Condensateur',d:'Démarrage ou permanent — moteur monophasé',c:'appareillage'},
-  {id:'e_voyant',n:'Voyant lumineux',d:'Signale un état : marche (vert), défaut (rouge)',c:'signalisation'},
-  {id:'e_buzzer',n:'Avertisseur sonore',d:'Alarme sonore sur défaut',c:'signalisation'},
-  {id:'e_pressostat_c',n:'Pressostat (contact)',d:'Contact commandé par la pression HP ou BP',c:'capteurs'},
-  {id:'e_thermostat_c',n:'Thermostat (contact)',d:'Contact commandé par la température',c:'capteurs'},
-  {id:'e_sonde_t',n:'Sonde de température',d:'Capteur analogique NTC, PTC ou PT1000',c:'capteurs'},
-  {id:'e_terre',n:'Mise à la terre (PE)',d:'Conducteur de protection — sécurité personnes',c:'cablage'},
-  {id:'e_borne',n:'Borne de connexion',d:'Point de raccordement sur bornier',c:'cablage'},
-  {id:'e_liaison',n:'Point de connexion',d:'Deux fils connectés au croisement (point noir)',c:'cablage'},
-  {id:'e_croisement',n:'Croisement sans connexion',d:'Deux fils se croisent sans contact',c:'cablage'},
+  {id:'e_fusible',n:'Fusible',d:'Protège contre les surintensités par fusion',c:'protection',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="30" x2="18" y2="30" stroke="#222" stroke-width="2"/><rect x="18" y="24" width="24" height="12" rx="1" fill="none" stroke="#222" stroke-width="2"/><circle cx="30" cy="30" r="3" fill="none" stroke="#222" stroke-width="1.5"/><line x1="42" y1="30" x2="55" y2="30" stroke="#222" stroke-width="2"/></svg>'},
+  {id:'e_sectionneur',n:'Sectionneur',d:'Isoler un circuit sans charge',c:'protection',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="30" x2="22" y2="30" stroke="#222" stroke-width="2"/><circle cx="22" cy="30" r="2.5" fill="#222"/><line x1="22" y1="30" x2="42" y2="16" stroke="#222" stroke-width="2"/><circle cx="42" cy="30" r="2.5" fill="#222"/><line x1="42" y1="30" x2="55" y2="30" stroke="#222" stroke-width="2"/></svg>'},
+  {id:'e_disjoncteur',n:'Disjoncteur magnétothermique',d:'Protection surcharge + court-circuit',c:'protection',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="30" x2="20" y2="30" stroke="#222" stroke-width="2"/><circle cx="20" cy="30" r="2.5" fill="#222"/><line x1="20" y1="30" x2="38" y2="16" stroke="#222" stroke-width="2"/><circle cx="40" cy="30" r="2.5" fill="#222"/><line x1="40" y1="30" x2="55" y2="30" stroke="#222" stroke-width="2"/><rect x="26" y="10" width="8" height="5" fill="none" stroke="#222" stroke-width="1.5"/><path d="M38 16 Q42 22 40 30" fill="none" stroke="#222" stroke-width="1.5"/></svg>'},
+  {id:'e_disj_moteur',n:'Disjoncteur moteur',d:'Protection magnétothermique réglable pour moteur',c:'protection',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="30" x2="18" y2="30" stroke="#222" stroke-width="2"/><circle cx="18" cy="30" r="2.5" fill="#222"/><line x1="18" y1="30" x2="36" y2="16" stroke="#222" stroke-width="2"/><circle cx="38" cy="30" r="2.5" fill="#222"/><line x1="38" y1="30" x2="55" y2="30" stroke="#222" stroke-width="2"/><rect x="24" y="10" width="8" height="5" fill="none" stroke="#222" stroke-width="1.5"/><text x="30" y="50" text-anchor="middle" font-size="10" font-weight="bold" fill="#222">M</text></svg>'},
+  {id:'e_relais_th',n:'Relais thermique',d:'Protection du moteur contre les surcharges (bilame)',c:'protection',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><rect x="15" y="18" width="30" height="24" rx="2" fill="none" stroke="#222" stroke-width="2"/><polyline points="20,30 23,24 27,36 31,24 35,36 38,30" fill="none" stroke="#222" stroke-width="1.5"/><line x1="5" y1="30" x2="15" y2="30" stroke="#222" stroke-width="2"/><line x1="45" y1="30" x2="55" y2="30" stroke="#222" stroke-width="2"/></svg>'},
+  {id:'e_inter_diff',n:'Interrupteur différentiel',d:'Protection des personnes (30mA)',c:'protection',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><rect x="15" y="14" width="30" height="26" rx="2" fill="none" stroke="#222" stroke-width="2"/><line x1="5" y1="27" x2="15" y2="27" stroke="#222" stroke-width="2"/><line x1="45" y1="27" x2="55" y2="27" stroke="#222" stroke-width="2"/><line x1="30" y1="40" x2="30" y2="50" stroke="#222" stroke-width="2"/><line x1="24" y1="50" x2="36" y2="50" stroke="#222" stroke-width="1.5"/><line x1="26" y1="53" x2="34" y2="53" stroke="#222" stroke-width="1.5"/><line x1="28" y1="56" x2="32" y2="56" stroke="#222" stroke-width="1.5"/><text x="30" y="30" text-anchor="middle" font-size="9" fill="#222">Δ</text></svg>'},
+  {id:'e_disj_diff',n:'Disjoncteur différentiel',d:'Protection combinée : surcharge + différentiel',c:'protection',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="25" x2="16" y2="25" stroke="#222" stroke-width="2"/><circle cx="16" cy="25" r="2" fill="#222"/><line x1="16" y1="25" x2="32" y2="12" stroke="#222" stroke-width="2"/><circle cx="34" cy="25" r="2" fill="#222"/><line x1="34" y1="25" x2="55" y2="25" stroke="#222" stroke-width="2"/><rect x="22" y="7" width="6" height="4" fill="none" stroke="#222" stroke-width="1.2"/><text x="30" y="42" text-anchor="middle" font-size="9" fill="#222">Δ</text><line x1="30" y1="45" x2="30" y2="52" stroke="#222" stroke-width="1.5"/><line x1="25" y1="52" x2="35" y2="52" stroke="#222" stroke-width="1.2"/><line x1="27" y1="55" x2="33" y2="55" stroke="#222" stroke-width="1.2"/></svg>'},
+  {id:'e_contacteur',n:'Contacteur (bobine KM)',d:'Appareil de commande à distance par bobine électromagnétique',c:'commande',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><rect x="18" y="18" width="24" height="16" rx="2" fill="none" stroke="#222" stroke-width="2"/><line x1="30" y1="6" x2="30" y2="18" stroke="#222" stroke-width="2"/><line x1="30" y1="34" x2="30" y2="46" stroke="#222" stroke-width="2"/><text x="30" y="30" text-anchor="middle" font-size="9" font-weight="bold" fill="#222">KM</text><line x1="18" y1="46" x2="42" y2="46" stroke="#222" stroke-width="1.5"/></svg>'},
+  {id:'e_contact_no',n:'Contact NO (normalement ouvert)',d:'Se ferme quand la bobine est excitée',c:'commande',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="35" x2="22" y2="35" stroke="#222" stroke-width="2"/><circle cx="22" cy="35" r="2.5" fill="#222"/><line x1="38" y1="35" x2="55" y2="35" stroke="#222" stroke-width="2"/><circle cx="38" cy="35" r="2.5" fill="#222"/><line x1="22" y1="35" x2="22" y2="20" stroke="#222" stroke-width="2"/></svg>'},
+  {id:'e_contact_nf',n:'Contact NF (normalement fermé)',d:"S'ouvre quand la bobine est excitée",c:'commande',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="35" x2="22" y2="35" stroke="#222" stroke-width="2"/><circle cx="22" cy="35" r="2.5" fill="#222"/><line x1="22" y1="35" x2="38" y2="35" stroke="#222" stroke-width="2"/><circle cx="38" cy="35" r="2.5" fill="#222"/><line x1="38" y1="35" x2="55" y2="35" stroke="#222" stroke-width="2"/><line x1="28" y1="28" x2="32" y2="28" stroke="#222" stroke-width="2"/><line x1="30" y1="28" x2="30" y2="35" stroke="#222" stroke-width="1.5"/></svg>'},
+  {id:'e_bp_marche',n:'Bouton poussoir Marche (NO)',d:'Contact momentané normalement ouvert — S1',c:'commande',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="35" x2="22" y2="35" stroke="#222" stroke-width="2"/><circle cx="22" cy="35" r="2.5" fill="#222"/><line x1="22" y1="35" x2="22" y2="20" stroke="#222" stroke-width="2"/><line x1="38" y1="35" x2="55" y2="35" stroke="#222" stroke-width="2"/><circle cx="38" cy="35" r="2.5" fill="#222"/><line x1="25" y1="15" x2="35" y2="15" stroke="#222" stroke-width="2"/><line x1="30" y1="15" x2="30" y2="20" stroke="#222" stroke-width="1.5"/></svg>'},
+  {id:'e_bp_arret',n:'Bouton poussoir Arrêt (NF)',d:'Contact momentané normalement fermé — S0',c:'commande',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="35" x2="22" y2="35" stroke="#222" stroke-width="2"/><circle cx="22" cy="35" r="2.5" fill="#222"/><line x1="22" y1="35" x2="38" y2="35" stroke="#222" stroke-width="2"/><circle cx="38" cy="35" r="2.5" fill="#222"/><line x1="38" y1="35" x2="55" y2="35" stroke="#222" stroke-width="2"/><line x1="28" y1="28" x2="32" y2="28" stroke="#222" stroke-width="2"/><line x1="30" y1="28" x2="30" y2="35" stroke="#222" stroke-width="1.5"/><line x1="25" y1="22" x2="35" y2="22" stroke="#222" stroke-width="2"/><line x1="30" y1="22" x2="30" y2="28" stroke="#222" stroke-width="1.5"/></svg>'},
+  {id:'e_selecteur',n:'Sélecteur 2 positions',d:'Commutateur rotatif Auto/Manu',c:'commande',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="12" fill="none" stroke="#222" stroke-width="2"/><line x1="30" y1="30" x2="40" y2="20" stroke="#222" stroke-width="2.5" stroke-linecap="round"/><path d="M37 17 L40 20 L36 21" fill="#222"/><line x1="5" y1="30" x2="18" y2="30" stroke="#222" stroke-width="2"/><line x1="42" y1="30" x2="55" y2="30" stroke="#222" stroke-width="2"/></svg>'},
+  {id:'e_tempo_travail',n:'Contact temporisé au travail',d:'Fermeture retardée après excitation',c:'commande',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="35" x2="22" y2="35" stroke="#222" stroke-width="2"/><circle cx="22" cy="35" r="2.5" fill="#222"/><line x1="22" y1="35" x2="22" y2="20" stroke="#222" stroke-width="2"/><line x1="38" y1="35" x2="55" y2="35" stroke="#222" stroke-width="2"/><circle cx="38" cy="35" r="2.5" fill="#222"/><line x1="32" y1="25" x2="42" y2="25" stroke="#222" stroke-width="1.5" marker-end="url(#arrowR)"/><defs><marker id="arrowR" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="#222"/></marker></defs><text x="37" y="22" font-size="7" fill="#222">t</text></svg>'},
+  {id:'e_tempo_repos',n:'Contact temporisé au repos',d:'Ouverture retardée après désexcitation',c:'commande',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="35" x2="22" y2="35" stroke="#222" stroke-width="2"/><circle cx="22" cy="35" r="2.5" fill="#222"/><line x1="22" y1="35" x2="38" y2="35" stroke="#222" stroke-width="2"/><circle cx="38" cy="35" r="2.5" fill="#222"/><line x1="38" y1="35" x2="55" y2="35" stroke="#222" stroke-width="2"/><line x1="28" y1="28" x2="32" y2="28" stroke="#222" stroke-width="2"/><line x1="30" y1="28" x2="30" y2="35" stroke="#222" stroke-width="1.5"/><line x1="18" y1="25" x2="28" y2="25" stroke="#222" stroke-width="1.5" marker-start="url(#arrowL)"/><defs><marker id="arrowL" markerWidth="6" markerHeight="6" refX="1" refY="3" orient="auto"><path d="M6,0 L0,3 L6,6" fill="#222"/></marker></defs><text x="20" y="22" font-size="7" fill="#222">t</text></svg>'},
+  {id:'e_arret_urgence',n:"Arrêt d'urgence (AU)",d:"Bouton coup de poing à accrochage — coupe tout",c:'commande',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="16" fill="none" stroke="#e74c3c" stroke-width="2.5"/><circle cx="30" cy="30" r="10" fill="#fde8e6" stroke="#e74c3c" stroke-width="1.5"/><line x1="23" y1="23" x2="37" y2="37" stroke="#e74c3c" stroke-width="2.5"/><line x1="37" y1="23" x2="23" y2="37" stroke="#e74c3c" stroke-width="2.5"/></svg>'},
+  {id:'e_moteur_tri',n:'Moteur asynchrone triphasé',d:'Moteur principal — couplage étoile ou triangle',c:'moteurs',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="18" fill="none" stroke="#222" stroke-width="2"/><text x="30" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">M</text><text x="30" y="42" text-anchor="middle" font-size="10" fill="#222">3~</text></svg>'},
+  {id:'e_moteur_mono',n:'Moteur monophasé',d:'Avec condensateur de démarrage ou permanent',c:'moteurs',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="18" fill="none" stroke="#222" stroke-width="2"/><text x="30" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">M</text><text x="30" y="42" text-anchor="middle" font-size="10" fill="#222">1~</text></svg>'},
+  {id:'e_motocomp',n:'Motocompresseur hermétique',d:'Moteur + compresseur en carter scellé',c:'moteurs',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="18" fill="none" stroke="#222" stroke-width="2"/><text x="30" y="26" text-anchor="middle" font-size="12" font-weight="bold" fill="#222">M</text><path d="M22 36 L30 44 L38 36 Z" fill="none" stroke="#222" stroke-width="1.5"/></svg>'},
+  {id:'e_motovent',n:'Motoventilateur',d:'Moteur entraînant ventilateur condenseur/évaporateur',c:'moteurs',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="18" fill="none" stroke="#222" stroke-width="2"/><text x="30" y="26" text-anchor="middle" font-size="12" font-weight="bold" fill="#222">M</text><line x1="24" y1="38" x2="30" y2="34" stroke="#222" stroke-width="1.5"/><line x1="36" y1="38" x2="30" y2="34" stroke="#222" stroke-width="1.5"/><line x1="30" y1="42" x2="30" y2="34" stroke="#222" stroke-width="1.5"/></svg>'},
+  {id:'e_transfo',n:'Transformateur',d:'Alimentation circuit de commande (400V→24V)',c:'appareillage',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="30" r="10" fill="none" stroke="#222" stroke-width="2"/><circle cx="36" cy="30" r="10" fill="none" stroke="#222" stroke-width="2"/><line x1="5" y1="24" x2="14" y2="24" stroke="#222" stroke-width="2"/><line x1="5" y1="36" x2="14" y2="36" stroke="#222" stroke-width="2"/><line x1="46" y1="24" x2="55" y2="24" stroke="#222" stroke-width="2"/><line x1="46" y1="36" x2="55" y2="36" stroke="#222" stroke-width="2"/></svg>'},
+  {id:'e_variateur',n:'Variateur de fréquence',d:'Fait varier la vitesse du moteur (ex: ATV)',c:'appareillage',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="14" width="36" height="32" rx="3" fill="none" stroke="#222" stroke-width="2"/><text x="30" y="32" text-anchor="middle" font-size="14" fill="#222">~</text><line x1="38" y1="20" x2="42" y2="40" stroke="#222" stroke-width="1.5" marker-end="url(#arV)"/><defs><marker id="arV" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5" fill="#222"/></marker></defs></svg>'},
+  {id:'e_resistance',n:'Résistance chauffante',d:'Réchauffeur carter compresseur ou dégivrage',c:'appareillage',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="30" x2="12" y2="30" stroke="#222" stroke-width="2"/><polyline points="12,30 15,22 21,38 27,22 33,38 39,22 45,38 48,30" fill="none" stroke="#222" stroke-width="2"/><line x1="48" y1="30" x2="55" y2="30" stroke="#222" stroke-width="2"/></svg>'},
+  {id:'e_condensateur',n:'Condensateur',d:'Démarrage ou permanent — moteur monophasé',c:'appareillage',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="8" x2="30" y2="24" stroke="#222" stroke-width="2"/><line x1="18" y1="24" x2="42" y2="24" stroke="#222" stroke-width="2.5"/><line x1="18" y1="32" x2="42" y2="32" stroke="#222" stroke-width="2.5"/><line x1="30" y1="32" x2="30" y2="52" stroke="#222" stroke-width="2"/></svg>'},
+  {id:'e_voyant',n:'Voyant lumineux',d:'Signale un état : marche (vert), défaut (rouge)',c:'signalisation',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="14" fill="none" stroke="#222" stroke-width="2"/><line x1="21" y1="21" x2="39" y2="39" stroke="#222" stroke-width="1.5"/><line x1="39" y1="21" x2="21" y2="39" stroke="#222" stroke-width="1.5"/></svg>'},
+  {id:'e_buzzer',n:'Avertisseur sonore',d:'Alarme sonore sur défaut',c:'signalisation',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><polygon points="18,42 30,14 42,42" fill="none" stroke="#222" stroke-width="2"/><path d="M44 28 Q50 30 44 32" fill="none" stroke="#222" stroke-width="1.5"/><path d="M47 24 Q55 30 47 36" fill="none" stroke="#222" stroke-width="1.5"/></svg>'},
+  {id:'e_pressostat_c',n:'Pressostat (contact)',d:'Contact commandé par la pression HP ou BP',c:'capteurs',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="16" fill="none" stroke="#222" stroke-width="2"/><text x="30" y="36" text-anchor="middle" font-size="16" font-weight="bold" fill="#222">P</text></svg>'},
+  {id:'e_thermostat_c',n:'Thermostat (contact)',d:'Contact commandé par la température',c:'capteurs',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="16" fill="none" stroke="#222" stroke-width="2"/><text x="30" y="36" text-anchor="middle" font-size="16" font-weight="bold" fill="#222">θ</text></svg>'},
+  {id:'e_sonde_t',n:'Sonde de température',d:'Capteur analogique NTC, PTC ou PT1000',c:'capteurs',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><polygon points="16,46 30,14 44,46" fill="none" stroke="#222" stroke-width="2"/><text x="30" y="40" text-anchor="middle" font-size="10" font-weight="bold" fill="#222">PT</text></svg>'},
+  {id:'e_terre',n:'Mise à la terre (PE)',d:'Conducteur de protection — sécurité personnes',c:'cablage',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="8" x2="30" y2="26" stroke="#222" stroke-width="2"/><line x1="16" y1="26" x2="44" y2="26" stroke="#222" stroke-width="2.5"/><line x1="20" y1="32" x2="40" y2="32" stroke="#222" stroke-width="2"/><line x1="24" y1="38" x2="36" y2="38" stroke="#222" stroke-width="1.5"/><line x1="28" y1="44" x2="32" y2="44" stroke="#222" stroke-width="1"/></svg>'},
+  {id:'e_borne',n:'Borne de connexion',d:'Point de raccordement sur bornier',c:'cablage',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="6" fill="none" stroke="#222" stroke-width="2"/><line x1="5" y1="30" x2="24" y2="30" stroke="#222" stroke-width="2"/><line x1="36" y1="30" x2="55" y2="30" stroke="#222" stroke-width="2"/></svg>'},
+  {id:'e_liaison',n:'Point de connexion',d:'Deux fils connectés au croisement (point noir)',c:'cablage',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="30" x2="55" y2="30" stroke="#222" stroke-width="2"/><line x1="30" y1="5" x2="30" y2="55" stroke="#222" stroke-width="2"/><circle cx="30" cy="30" r="4" fill="#222"/></svg>'},
+  {id:'e_croisement',n:'Croisement sans connexion',d:'Deux fils se croisent sans contact',c:'cablage',s:'<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="30" x2="24" y2="30" stroke="#222" stroke-width="2"/><path d="M24 30 Q30 18 36 30" fill="none" stroke="#222" stroke-width="2"/><line x1="36" y1="30" x2="55" y2="30" stroke="#222" stroke-width="2"/><line x1="30" y1="5" x2="30" y2="55" stroke="#222" stroke-width="2"/></svg>'},
 ];
 const ELEC_CATS={protection:'🔌 Protection',commande:'🎛️ Commande',moteurs:'🔋 Moteurs',appareillage:'🏭 Appareillage',signalisation:'💡 Signalisation',capteurs:'📏 Capteurs',cablage:'🔗 Câblage'};
 
@@ -1081,8 +1081,9 @@ function go(id){
   if(id==='classement')renderLB();
   const calcBtn=document.getElementById('calcToggle');
   const calcW=document.getElementById('calcWidget');
-  if(calcBtn){calcBtn.style.display=(id==='quiz'||id==='eval')?'block':'none'}
-  if(calcW&&id!=='quiz'&&id!=='eval'){calcW.classList.remove('open')}
+  if(calcBtn){calcBtn.style.display='block'}
+  // Fermer le widget calc si on change d'écran (mais le bouton reste visible)
+  if(calcW){calcW.classList.remove('open')}
 }
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>go(t.dataset.s)));
 
@@ -1633,8 +1634,16 @@ function elecFilter(c){elecCatFilter=c;document.querySelectorAll('#elecCatFilter
 function renderElec(){
   const filtered=elecCatFilter==='all'?ELEC_SYMS:ELEC_SYMS.filter(s=>s.c===elecCatFilter);
   document.getElementById('elecGrid').innerHTML=filtered.map(s=>`
-    <div class="elec-card"><div class="ename">${s.n}</div><div class="edesc">${s.d}</div><div class="ecat">${ELEC_CATS[s.c]||s.c}</div></div>
+    <div class="sym-card" onclick="showElecModal('${s.id}')"><div class="svgbox">${s.s||''}</div><div class="sname">${s.n}</div><div class="scat">${ELEC_CATS[s.c]||s.c}</div></div>
   `).join('');
+}
+function showElecModal(id){
+  const s=ELEC_SYMS.find(e=>e.id===id);if(!s)return;
+  document.getElementById('mSvg').innerHTML=s.s||'';
+  document.getElementById('mName').textContent=s.n;
+  document.getElementById('mDesc').textContent=s.d;
+  document.getElementById('mMeta').textContent=(ELEC_CATS[s.c]||s.c)+' — Symbole IEC';
+  document.getElementById('modalBg').classList.add('show');
 }
 
 let eq={questions:[],idx:0,good:0,bad:0};
@@ -1803,9 +1812,7 @@ function updateCalcVisibility(questionText){
   const btn=document.getElementById('calcToggle');
   const widget=document.getElementById('calcWidget');
   if(!btn)return;
-  const inQuiz=document.getElementById('s-quiz')&&document.getElementById('s-quiz').classList.contains('active');
-  const inEval=document.getElementById('s-eval')&&document.getElementById('s-eval').classList.contains('active');
-  btn.style.display=(inQuiz||inEval)?'block':'none';
+  btn.style.display='block';
   const txt=(questionText||'').toLowerCase();
   const isCalcQ = (
     (txt.includes('kg') && /r\d{2,3}/.test(txt) && (txt.includes('teq co2') || txt.includes('teq co₂') || txt.includes('quelle est sa'))) ||

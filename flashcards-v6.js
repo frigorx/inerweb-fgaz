@@ -1,0 +1,80 @@
+// Flash cards enrichies V6 — 65 cartes
+module.exports = [
+  // Ch1 - Environnement
+  {q:"Formule de calcul tCO₂e ?",a:"tCO₂e = (Charge kg × GWP) / 1000"},
+  {q:"Protocole de Montréal (1987) ?",a:"Protection couche d'ozone — élimination CFC/HCFC"},
+  {q:"Protocole de Kyoto (1997) ?",a:"Réduction des gaz à effet de serre — inclut les HFC"},
+  {q:"Amendement de Kigali (2016) ?",a:"Ajout des HFC au Protocole de Montréal — phase-down mondial"},
+  {q:"GWP = référence ?",a:"CO₂ = 1 (sur 100 ans)"},
+  // Ch2 - Réglementation
+  {q:"Règlement F-Gas actuel ?",a:"UE 2024/573 (depuis mars 2024)"},
+  {q:"Phase-down HFC ?",a:"Réduction progressive quotas HFC — -85% en 2030 vs 2015"},
+  {q:"Arrêté formation fluides ?",a:"Arrêté du 21 novembre 2025"},
+  {q:"Amende émission volontaire ?",a:"1 500 € (contravention 5e classe)"},
+  {q:"GWP max HFC vierge maintenance (depuis 2025) ?",a:"GWP < 2500 (sinon recyclé/régénéré uniquement)"},
+  // Ch3 - Attestations
+  {q:"Remise à niveau attestation ?",a:"Tous les 7 ans (à partir de 2027)"},
+  {q:"Catégorie I attestation d'aptitude ?",a:"Toutes opérations, toutes charges"},
+  {q:"Catégorie II attestation d'aptitude ?",a:"Opérations sur équipements < 2 kg (ou hermétiques < 6 kg)"},
+  {q:"Catégorie III attestation d'aptitude ?",a:"Récupération uniquement (< 3 kg, hermétiques < 6 kg)"},
+  {q:"Catégorie IV attestation d'aptitude ?",a:"Contrôle d'étanchéité uniquement (pas de manipulation de fluide)"},
+  // Ch4 - Fluides
+  {q:"GWP du R134a ?",a:"1430"},
+  {q:"GWP du R410A ?",a:"2088"},
+  {q:"GWP du R404A ?",a:"3922 (interdit vierge depuis 2025)"},
+  {q:"GWP du R32 ?",a:"675 (faible GWP, A2L)"},
+  {q:"R407C : type de mélange ?",a:"Zéotrope (glissement 7°C) — charge liquide uniquement"},
+  {q:"R410A : type de mélange ?",a:"Quasi-azéotrope (glissement < 0,2°C)"},
+  {q:"ODP des HFC ?",a:"0 (ne détruisent pas l'ozone)"},
+  {q:"CFC interdits depuis ?",a:"1995 (UE) — Protocole de Montréal"},
+  {q:"HCFC (R22) interdit depuis ?",a:"2015 (UE) — même recyclé/régénéré"},
+  // Ch5 - Cycle frigo
+  {q:"4 organes circuit frigo ?",a:"Compresseur, Condenseur, Détendeur, Évaporateur"},
+  {q:"Rôle compresseur ?",a:"Comprime gaz BP vers gaz HP (augmente P et T°)"},
+  {q:"Rôle condenseur ?",a:"Gaz HP → Liquide HP (cède chaleur au milieu extérieur)"},
+  {q:"Rôle détendeur ?",a:"Liquide HP → Mélange liq/vap BP (laminage isenthalpique)"},
+  {q:"Rôle évaporateur ?",a:"Liquide BP → Gaz BP (absorbe chaleur = production du froid)"},
+  {q:"Surchauffe = ?",a:"T° aspiration − T° évaporation saturée (5 à 8 K typique)"},
+  {q:"Sous-refroidissement = ?",a:"T° condensation saturée − T° liquide sortie condenseur (4 à 7 K)"},
+  {q:"Diagramme de Mollier ?",a:"Diagramme log P / h (pression-enthalpie) du cycle frigo"},
+  // Ch6 - Composants
+  {q:"Voyant liquide: bulle = ?",a:"Manque de charge OU sous-refroidissement insuffisant"},
+  {q:"Voyant liquide: pastille verte = ?",a:"Circuit sec (humidité OK)"},
+  {q:"Déshydrateur: rôle ?",a:"Absorber l'humidité résiduelle (tamis moléculaire)"},
+  {q:"Pressostat HP: rôle ?",a:"Sécurité — coupe le compresseur si P trop haute"},
+  // Ch7 - Manipulation
+  {q:"Tirage au vide: objectif ?",a:"< 500 µm (0,5 mbar) pendant 30 min minimum"},
+  {q:"Brasage: toujours sous ?",a:"Flux d'azote (éviter oxydation intérieure du cuivre)"},
+  {q:"Charge zéotrope (R407C) ?",a:"Phase liquide uniquement (sinon démixtion)"},
+  {q:"Remplissage max bouteille récupération ?",a:"80% du volume — jamais remplir complètement"},
+  {q:"Balance de charge: précision ?",a:"± 5 g minimum"},
+  // Ch8 - Détection
+  {q:"Seuil contrôle annuel ?",a:"5 tCO₂e"},
+  {q:"Seuil contrôle semestriel ?",a:"50 tCO₂e"},
+  {q:"Seuil détection auto ?",a:"500 tCO₂e"},
+  {q:"Délai réparation fuite ?",a:"14 jours maximum"},
+  {q:"Sensibilité détecteur ?",a:"Minimum 5 g/an — calibration annuelle"},
+  // Ch9 - Traçabilité
+  {q:"Conservation registre ?",a:"5 ans après mise hors service"},
+  {q:"Déclaration installation ?",a:"30 jours après mise en service"},
+  {q:"Documentation contrôle ?",a:"1 mois après intervention"},
+  {q:"CERFA intervention fluides ?",a:"CERFA 15497*04"},
+  {q:"Récupération obligatoire ?",a:"Toujours (même petites quantités)"},
+  // Ch10 - Fin de vie
+  {q:"Bouteille récupération: couleur ?",a:"Grise à collerette jaune"},
+  {q:"Différence recyclage/régénération ?",a:"Recyclage = filtrage simple. Régénération = remise aux spécifications d'origine (labo)."},
+  {q:"DEEE = ?",a:"Déchets d'Équipements Électriques et Électroniques"},
+  {q:"Mélanger des fluides différents ?",a:"Strictement interdit — chaque fluide dans sa bouteille"},
+  // Ch11 - Fluides naturels
+  {q:"R744 = ?",a:"CO₂ (GWP 1, naturel, hautes pressions > 100 bar)"},
+  {q:"R717 = ?",a:"NH₃ Ammoniac (toxique B2L, GWP < 1)"},
+  {q:"R290 = ?",a:"Propane (inflammable A3, GWP 3)"},
+  {q:"CO₂ transcritique: pression max ?",a:"> 100 bar côté HP (point critique 73,8 bar / 31°C)"},
+  {q:"A2L signifie ?",a:"Légèrement inflammable, faible toxicité (vitesse flamme < 10 cm/s)"},
+  // Ch12 - Sécurité
+  {q:"EPI manipulation fluides ?",a:"Gants cryogéniques, lunettes, chaussures de sécurité"},
+  {q:"Brûlure par fluide frigorigène ?",a:"Brûlure par le froid (cryogénique) — rincer à l'eau tiède"},
+  {q:"ATEX concerne quels fluides ?",a:"Fluides inflammables: R290, R600a, R1270 (classe A3)"},
+  {q:"Consignation avant intervention ?",a:"Électrique + fluidique + mécanique — cadenas + pancarte"},
+  {q:"Ventilation locale technique NH3 ?",a:"Obligatoire — mécanique avec extraction basse (NH3 plus léger que l'air: non, NH3 est léger → extraction haute)"},
+];
