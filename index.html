@@ -973,6 +973,7 @@ body{font-family:Calibri,'Segoe UI',Tahoma,sans-serif;font-size:16px;background:
 
 <!-- ==================== APP ENGINE ==================== -->
 <script>
+
 // ============================================================
 // DATA LOADING
 // ============================================================
@@ -1603,65 +1604,6 @@ function mClick(el){
 }
 
 // ============================================================
-// ELECTRICAL (text-only)
-// ============================================================
-
-;ELEC_SYMS.forEach(s=>{cats[s.c]=(cats[s.c]||0)+1});
-  let html=`<button class="fbtn active" data-ec="all" onclick="elecFilter('all')">Tous ${ELEC_SYMS.length}</button>`;
-  Object.entries(cats).forEach(([c,n])=>{html+=`<button class="fbtn" data-ec="${c}" onclick="elecFilter('${c}')">${ELEC_CATS[c]||c} ${n}</button>`});
-  document.getElementById('elecCatFilters').innerHTML=html;
-  renderElec();
-}
-
-
-
-
-
-;
-  });
-  eq={questions,idx:0,good:0,bad:0};
-  document.getElementById('elec-quiz').style.display='';
-  document.getElementById('elec-results').style.display='none';
-  renderEQ();
-}
-
-  const q=eq.questions[eq.idx],t=eq.questions.length;
-  document.getElementById('eqNum').textContent=`${eq.idx+1}/${t}`;
-  document.getElementById('eqPbar').style.width=`${(eq.idx/t)*100}%`;
-  document.getElementById('eqGood').textContent=eq.good+'✓';document.getElementById('eqBad').textContent=eq.bad+'✗';
-  document.getElementById('eqFb').className='q-feedback';document.getElementById('eqFb').style.display='none';
-  document.getElementById('eqNext').style.display='none';
-  const opts=shuffle([q.correct,...q.dist]);
-  const area=document.getElementById('eqArea');
-  if(q.mode==='name'){
-    area.innerHTML=`<h3 style="margin-bottom:.5rem">Quelle est la fonction de ce composant ?</h3>
-      <div class="sq-name-display">${q.correct.n}</div>
-      <div class="sq-opts">${opts.map(o=>`<div class="sq-opt" data-id="${o.id}" onclick="answerEQ('${o.id}','${q.correct.id}',this)">${o.d}</div>`).join('')}</div>`;
-  }else{
-    area.innerHTML=`<h3 style="margin-bottom:.5rem">Quel composant correspond à cette description ?</h3>
-      <div style="padding:.8rem;background:var(--gris);border-radius:8px;margin-bottom:.8rem;font-size:.9rem;text-align:center">${q.correct.d}</div>
-      <div class="sq-opts">${opts.map(o=>`<div class="sq-opt" data-id="${o.id}" onclick="answerEQ('${o.id}','${q.correct.id}',this)">${o.n}</div>`).join('')}</div>`;
-  }
-}
-
-);
-  if(ok)eq.good++;else eq.bad++;
-  const fb=document.getElementById('eqFb');fb.style.display='block';fb.className='q-feedback show '+(ok?'ok':'ko');
-  fb.textContent=ok?'✅ Correct !':'❌ C\'était : '+ELEC_SYMS.find(s=>s.id===correct).n;
-  document.getElementById('eqNext').style.display='';document.getElementById('eqGood').textContent=eq.good+'✓';document.getElementById('eqBad').textContent=eq.bad+'✗';
-  ST.total++;if(ok)ST.correct++;saveST();updateTopbar();
-}
-
- Quiz Électro terminé !</h2>
-    <div class="big ${cls}">${pct}%</div>
-    <div class="sub">${eq.good}/${t} bonnes réponses</div>
-    <div class="results-actions">
-      <button class="btn btn-ghost" onclick="hideElecQuiz();document.getElementById('elec-results').style.display='none'">← Retour</button>
-      <button class="btn btn-orange" onclick="startElecQuiz()">🔄 Rejouer</button>
-      <button class="btn btn-primary" onclick="go('home')">🏠 Accueil</button>
-    </div>`;
-}
-
 // ============================================================
 // STATS
 // ============================================================
@@ -2010,6 +1952,7 @@ function exportCSV(){
 buildGlossaire();renderLB();
 // Afficher nom élève si déjà enregistré
 (function(){const e=JSON.parse(localStorage.getItem('fgaz_eleve')||'null');if(e){document.getElementById('userName').textContent=e.prenom;document.getElementById('userBadge').style.display=''}})();
+
 </script>
 </body>
 </html>
