@@ -198,6 +198,20 @@ body{font-family:Calibri,'Segoe UI',system-ui,sans-serif;font-size:16px;backgrou
   .match-area{grid-template-columns:1fr}
   .tab{padding:.4rem .5rem;font-size:.75rem}
 }
+/* === ACCESSIBILITE === */
+.access-panel{position:fixed;top:60px;right:16px;width:300px;background:var(--card);border-radius:var(--radius);box-shadow:0 8px 32px rgba(0,0,0,.25);z-index:101;display:none;overflow:hidden;border:2px solid var(--navy);animation:modalPop .2s ease}
+.access-panel.show{display:block}
+.access-header{background:linear-gradient(135deg,var(--navy),var(--turq));color:#fff;padding:.6rem .8rem;display:flex;justify-content:space-between;align-items:center;font-size:.9rem;font-weight:700}
+.access-header button{background:none;border:none;color:#fff;font-size:1.1rem;cursor:pointer}
+.access-body{padding:.8rem}
+.access-row{margin-bottom:.8rem}
+.access-row label{display:block;font-size:.8rem;font-weight:600;color:var(--navy);margin-bottom:.3rem}
+.access-row .a-btns{display:flex;gap:.3rem;flex-wrap:wrap}
+.access-row .a-btn{padding:.3rem .6rem;border:2px solid var(--border);background:var(--card);border-radius:8px;cursor:pointer;font-size:.78rem;color:var(--txt2);transition:all .15s}
+.access-row .a-btn:hover{border-color:var(--turq);color:var(--navy)}
+.access-row .a-btn.active{background:linear-gradient(135deg,var(--navy),var(--turq));color:#fff;border-color:var(--navy)}
+.access-row .a-slider{width:100%;accent-color:var(--turq)}
+.access-row .a-val{font-size:.75rem;color:var(--txt3);text-align:center}
 </style>
 </head>
 <body>
@@ -212,6 +226,49 @@ body{font-family:Calibri,'Segoe UI',system-ui,sans-serif;font-size:16px;backgrou
       <span id="userBadge" style="display:none;background:var(--orange3);color:var(--navy);font-weight:600">👤 <span id="userName"></span></span>
       <span>📝 <span class="hi" id="gTotal">0</span> questions</span>
       <span>🏆 <span class="hi" id="gPct">0%</span></span>
+      <button onclick="toggleAccessPanel()" style="background:none;border:2px solid rgba(255,255,255,.3);border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:1rem;color:#fff;display:flex;align-items:center;justify-content:center" title="Accessibilité">♿</button>
+    </div>
+  </div>
+
+  <!-- PANNEAU ACCESSIBILITE -->
+  <div id="accessPanel" class="access-panel">
+    <div class="access-header">
+      <span>♿ Accessibilité</span>
+      <button onclick="toggleAccessPanel()">✕</button>
+    </div>
+    <div class="access-body">
+      <div class="access-row">
+        <label>🔤 Taille de police : <span id="accFontVal">16px</span></label>
+        <input type="range" class="a-slider" id="accFontSize" min="14" max="22" step="2" value="16" oninput="applyAccess()">
+      </div>
+      <div class="access-row">
+        <label>↕️ Espacement des lignes</label>
+        <div class="a-btns" id="accLineH">
+          <span class="a-btn active" data-v="1.5" onclick="setAccBtn(this,'accLineH')">Normal</span>
+          <span class="a-btn" data-v="1.8" onclick="setAccBtn(this,'accLineH')">Aéré</span>
+          <span class="a-btn" data-v="2.2" onclick="setAccBtn(this,'accLineH')">Très aéré</span>
+        </div>
+      </div>
+      <div class="access-row">
+        <label>↔️ Espacement des mots</label>
+        <div class="a-btns" id="accWordSp">
+          <span class="a-btn active" data-v="0" onclick="setAccBtn(this,'accWordSp')">Normal</span>
+          <span class="a-btn" data-v="0.12" onclick="setAccBtn(this,'accWordSp')">Espacé</span>
+          <span class="a-btn" data-v="0.25" onclick="setAccBtn(this,'accWordSp')">Très espacé</span>
+        </div>
+      </div>
+      <div class="access-row">
+        <label>🔠 Police</label>
+        <div class="a-btns" id="accFont">
+          <span class="a-btn active" data-v="default" onclick="setAccBtn(this,'accFont')">Calibri</span>
+          <span class="a-btn" data-v="verdana" onclick="setAccBtn(this,'accFont')">Verdana</span>
+          <span class="a-btn" data-v="comic" onclick="setAccBtn(this,'accFont')">Comic Sans</span>
+          <span class="a-btn" data-v="arial" onclick="setAccBtn(this,'accFont')">Arial</span>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:.5rem">
+        <button class="btn btn-ghost btn-sm" onclick="resetAccess()">🔄 Réinitialiser</button>
+      </div>
     </div>
   </div>
 
@@ -715,45 +772,7 @@ body{font-family:Calibri,'Segoe UI',system-ui,sans-serif;font-size:16px;backgrou
     <h3>📚 Ressources</h3>
     <button onclick="toggleRes()" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--txt3)">✕</button>
   </div>
-  <div class="res-tabs">
-    <button class="res-tab active" onclick="resTab('res-regl',this)">📋 Règlement</button>
-    <button class="res-tab" onclick="resTab('res-flu',this)">🧪 Fluides</button>
-    <button class="res-tab" onclick="resTab('res-prat',this)">🔧 Pratiques</button>
-  </div>
-  <div id="res-regl" class="res-content active">
-    <b>Seuils et Contrôles d'Étanchéité</b>
-    <p>Règlement <b>UE 2024/573</b> — obligations selon charge tCO₂e.</p>
-    <div class="res-hl"><b>Formule :</b> tCO₂e = (Charge kg × GWP) / 1000</div>
-    <table><tr><th>Charge tCO₂e</th><th>Standard</th><th>Avec détecteur</th></tr>
-      <tr><td>&lt; 5 t</td><td>Non obligatoire*</td><td>Non obligatoire</td></tr>
-      <tr><td>5 à 50 t</td><td>12 mois</td><td>24 mois</td></tr>
-      <tr><td>50 à 500 t</td><td>6 mois</td><td>12 mois</td></tr>
-      <tr><td>&gt; 500 t</td><td>3 mois</td><td>6 mois</td></tr>
-    </table>
-    <p style="font-size:.75rem;color:var(--txt3)">*Sauf hermétiques : seuil 10 t</p>
-    <div class="res-hl"><b>Délais :</b> Réparation fuite = 14j · Déclaration = 30j · Registre = 5 ans · Attestation = 7 ans</div>
-  </div>
-  <div id="res-flu" class="res-content">
-    <b>Potentiel de Réchauffement Global (GWP)</b>
-    <table><tr><th>Fluide</th><th>Famille</th><th>GWP</th><th>Sécu</th></tr>
-      <tr><td><b>R744 (CO₂)</b></td><td>Naturel</td><td>1</td><td><span class="badge-a1">A1</span></td></tr>
-      <tr><td><b>R290</b></td><td>HC</td><td>3</td><td>A3</td></tr>
-      <tr><td><b>R32</b></td><td>HFC</td><td>675</td><td><span class="badge-a2l">A2L</span></td></tr>
-      <tr><td><b>R134a</b></td><td>HFC</td><td>1430</td><td><span class="badge-a1">A1</span></td></tr>
-      <tr><td><b>R407C</b></td><td>HFC</td><td>1774</td><td><span class="badge-a1">A1</span></td></tr>
-      <tr><td><b>R410A</b></td><td>HFC</td><td>2088</td><td><span class="badge-a1">A1</span></td></tr>
-      <tr><td><b>R404A</b></td><td>HFC</td><td>3922</td><td><span class="badge-a1">A1</span></td></tr>
-      <tr><td><b>R717</b></td><td>Naturel</td><td>&lt;1</td><td>B2L</td></tr>
-    </table>
-    <div class="res-hl"><b>Zéotrope</b> (R407C) : glissement 7°C, charge liquide seule<br><b>Azéotrope</b> (R410A) : glissement &lt;0,2°C, charge liq ou gaz</div>
-  </div>
-  <div id="res-prat" class="res-content">
-    <b>Bonnes Pratiques</b>
-    <p><b>1. Tirage au vide</b><br>Niveau : 0,5 mbar (500 µ) · Test maintien : 30 min</p>
-    <p><b>2. Brasage</b><br>Toujours sous flux d'azote · Métal : cuivre-phosphore ou argent</p>
-    <p><b>3. Récupération</b><br>Bouteille grise collerette jaune · Remplissage max 80% · Interdiction mélanger fluides</p>
-    <div class="res-hl"><b>Sanctions :</b><br>Dégazage volontaire : 1 500 €<br>Absence de registre : 750 €<br>Défaut d'habilitation : 7 500 €</div>
-  </div>
+  <div id="resBody"></div>
 </div>
 
 <!-- MODAL -->
@@ -1300,8 +1319,18 @@ function updateCalcVisibility(questionText){
   else{widget.classList.remove('calc-blocked');btn.classList.remove('blocked');btn.title='Calculatrice';}
 }
 
-// RESOURCE PANEL
-function toggleRes(){document.getElementById('resPanel').classList.toggle('open')}
+// RESOURCE PANEL — CONTEXTUEL PAR CHAPITRE
+function toggleRes(){
+  const panel=document.getElementById('resPanel');
+  const isOpen=panel.classList.contains('open');
+  if(!isOpen){updateResPanel();panel.classList.add('open')}else{panel.classList.remove('open')}
+}
+function updateResPanel(){
+  const zid=(typeof quiz!=='undefined'&&quiz&&quiz.zone)?quiz.zone:'ch1';
+  const body=document.getElementById('resBody');
+  const html=CHAPTER_RESOURCES[zid]||CHAPTER_RESOURCES['ch1'];
+  body.innerHTML=html;
+}
 function resTab(id,btn){document.querySelectorAll('.res-content').forEach(c=>c.classList.remove('active'));document.querySelectorAll('.res-tab').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');if(btn)btn.classList.add('active')}
 
 // FICHES
@@ -1401,6 +1430,357 @@ function exportCSV(){
   const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});const link=document.createElement('a');link.href=URL.createObjectURL(blob);
   link.download='fgaz_v6_resultats_'+new Date().toISOString().split('T')[0]+'.csv';document.body.appendChild(link);link.click();document.body.removeChild(link);
 }
+
+// ============================================================
+// ACCESSIBILITE DYS
+// ============================================================
+function toggleAccessPanel(){document.getElementById('accessPanel').classList.toggle('show')}
+function setAccBtn(el,groupId){
+  document.querySelectorAll('#'+groupId+' .a-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');applyAccess();
+}
+function applyAccess(){
+  const fs=document.getElementById('accFontSize').value;
+  document.getElementById('accFontVal').textContent=fs+'px';
+  document.documentElement.style.fontSize=fs+'px';
+  const lh=document.querySelector('#accLineH .a-btn.active');
+  if(lh)document.body.style.lineHeight=lh.dataset.v;
+  const ws=document.querySelector('#accWordSp .a-btn.active');
+  if(ws)document.body.style.wordSpacing=ws.dataset.v==='0'?'normal':ws.dataset.v+'em';
+  const ff=document.querySelector('#accFont .a-btn.active');
+  if(ff){
+    switch(ff.dataset.v){
+      case'verdana':document.body.style.fontFamily='Verdana,sans-serif';document.body.style.letterSpacing='0.05em';break;
+      case'comic':document.body.style.fontFamily="'Comic Sans MS','Comic Sans',cursive";document.body.style.letterSpacing='0.03em';break;
+      case'arial':document.body.style.fontFamily='Arial,Helvetica,sans-serif';document.body.style.letterSpacing='normal';break;
+      default:document.body.style.fontFamily="Calibri,'Segoe UI',system-ui,sans-serif";document.body.style.letterSpacing='normal';break;
+    }
+  }
+  saveAccess();
+}
+function saveAccess(){
+  const cfg={
+    fontSize:document.getElementById('accFontSize').value,
+    lineHeight:(document.querySelector('#accLineH .a-btn.active')||{}).dataset?.v||'1.5',
+    wordSpacing:(document.querySelector('#accWordSp .a-btn.active')||{}).dataset?.v||'0',
+    font:(document.querySelector('#accFont .a-btn.active')||{}).dataset?.v||'default'
+  };
+  localStorage.setItem('fgaz_access',JSON.stringify(cfg));
+}
+function loadAccess(){
+  try{
+    const cfg=JSON.parse(localStorage.getItem('fgaz_access'));if(!cfg)return;
+    if(cfg.fontSize){document.getElementById('accFontSize').value=cfg.fontSize}
+    if(cfg.lineHeight){document.querySelectorAll('#accLineH .a-btn').forEach(b=>{b.classList.toggle('active',b.dataset.v===cfg.lineHeight)})}
+    if(cfg.wordSpacing){document.querySelectorAll('#accWordSp .a-btn').forEach(b=>{b.classList.toggle('active',b.dataset.v===cfg.wordSpacing)})}
+    if(cfg.font){document.querySelectorAll('#accFont .a-btn').forEach(b=>{b.classList.toggle('active',b.dataset.v===cfg.font)})}
+    applyAccess();
+  }catch(e){}
+}
+function resetAccess(){
+  localStorage.removeItem('fgaz_access');
+  document.getElementById('accFontSize').value='16';
+  document.querySelectorAll('#accLineH .a-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
+  document.querySelectorAll('#accWordSp .a-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
+  document.querySelectorAll('#accFont .a-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
+  document.documentElement.style.fontSize='';document.body.style.lineHeight='';document.body.style.wordSpacing='';
+  document.body.style.fontFamily='';document.body.style.letterSpacing='';
+  document.getElementById('accFontVal').textContent='16px';
+}
+loadAccess();
+
+// ============================================================
+// RESSOURCES CONTEXTUELLES PAR CHAPITRE
+// ============================================================
+const CHAPTER_RESOURCES={};
+CHAPTER_RESOURCES['ch1']=`
+<b>🌍 Chap. 1 — Environnement & Effet de serre</b>
+<div class="res-hl"><b>Effet de serre :</b> Le soleil réchauffe la Terre. Une partie du rayonnement infrarouge est renvoyée vers l'espace, mais les gaz à effet de serre (GES) en piègent une partie, réchauffant l'atmosphère.</div>
+<b>GWP des principales familles :</b>
+<table><tr><th>Famille</th><th>Exemples</th><th>GWP</th><th>ODP</th></tr>
+<tr><td><b>CFC</b></td><td>R12, R11</td><td>4 660 – 10 900</td><td>0,6 – 1,0</td></tr>
+<tr><td><b>HCFC</b></td><td>R22</td><td>1 810</td><td>0,055</td></tr>
+<tr><td><b>HFC</b></td><td>R134a, R410A</td><td>675 – 3 922</td><td>0</td></tr>
+<tr><td><b>HFO</b></td><td>R1234yf, R1234ze</td><td>4 – 7</td><td>0</td></tr>
+<tr><td><b>Naturels</b></td><td>R744, R290, R717</td><td>0 – 3</td><td>0</td></tr></table>
+<b>Accords internationaux :</b>
+<table><tr><th>Accord</th><th>Année</th><th>Objectif</th></tr>
+<tr><td>Protocole de Montréal</td><td>1987</td><td>Élimination des CFC/HCFC (couche d'ozone)</td></tr>
+<tr><td>Protocole de Kyoto</td><td>1997</td><td>Réduction des GES (dont HFC)</td></tr>
+<tr><td>Accord de Paris</td><td>2015</td><td>Limiter le réchauffement à +1,5°C / +2°C</td></tr>
+<tr><td>Amendement de Kigali</td><td>2016</td><td>Réduction progressive des HFC (−85% d'ici 2036)</td></tr></table>
+<div class="res-hl"><b>ODP</b> (Ozone Depletion Potential) : potentiel d'appauvrissement de la couche d'ozone (référence R11 = 1)<br>
+<b>GWP</b> (Global Warming Potential) : potentiel de réchauffement global sur 100 ans (référence CO₂ = 1)</div>`;
+
+CHAPTER_RESOURCES['ch2']=`
+<b>📋 Chap. 2 — Réglementation européenne</b>
+<div class="res-hl"><b>Formule clé :</b> tCO₂e = (Charge kg × GWP) / 1000</div>
+<b>Seuils et fréquences de contrôle :</b>
+<table><tr><th>Charge tCO₂e</th><th>Standard</th><th>Avec détecteur</th></tr>
+<tr style="background:#d4edda"><td>&lt; 5 t</td><td>Non obligatoire*</td><td>Non obligatoire</td></tr>
+<tr style="background:#fffde7"><td>5 à 50 t</td><td>12 mois</td><td>24 mois</td></tr>
+<tr style="background:#fff3cd"><td>50 à 500 t</td><td>6 mois</td><td>12 mois</td></tr>
+<tr style="background:#fde8e6"><td>&gt; 500 t</td><td>3 mois</td><td>6 mois</td></tr></table>
+<p style="font-size:.75rem;color:var(--txt3)">*Sauf hermétiques : seuil 10 t</p>
+<b>Chronologie des interdictions HFC :</b>
+<table><tr><th>Date</th><th>Interdiction</th></tr>
+<tr><td>2020</td><td>Réfrigérateurs/congélateurs domestiques GWP ≥ 150</td></tr>
+<tr><td>2022</td><td>Systèmes centralisés ≥ 40 kW, GWP ≥ 150</td></tr>
+<tr><td>2025</td><td>Split ≤ 3 kg, GWP ≥ 750</td></tr>
+<tr><td>2030</td><td>Split tous, GWP ≥ 750</td></tr></table>
+<b>Sanctions :</b>
+<table><tr><th>Infraction</th><th>Amende</th></tr>
+<tr><td>Absence de registre d'équipement</td><td>750 €</td></tr>
+<tr><td>Dégazage volontaire</td><td>1 500 €</td></tr>
+<tr><td>Défaut d'attestation de capacité</td><td>7 500 €</td></tr></table>
+<div class="res-hl"><b>Délais :</b> Réparation fuite = <b>14 jours</b> · Déclaration installation = <b>30 jours</b> · Conservation registre = <b>5 ans</b> · Validité attestation = <b>7 ans</b></div>`;
+
+CHAPTER_RESOURCES['ch3']=`
+<b>🎓 Chap. 3 — Attestations & Habilitations</b>
+<b>Les 4 catégories d'attestation de capacité :</b>
+<table><tr><th>Cat.</th><th>Périmètre</th><th>Détails</th></tr>
+<tr style="background:#d4edda"><td><b>I</b></td><td>Tous circuits</td><td>Contrôle d'étanchéité, récupération, installation, maintenance sur tous types d'équipements</td></tr>
+<tr style="background:#fffde7"><td><b>II</b></td><td>&lt; 2 kg de charge</td><td>Installation, maintenance et récupération sur équipements contenant moins de 2 kg</td></tr>
+<tr style="background:#fff3cd"><td><b>III</b></td><td>&lt; 3 kg hermétiques</td><td>Récupération de fluides sur équipements frigorifiques hermétiques contenant moins de 3 kg</td></tr>
+<tr style="background:#fde8e6"><td><b>IV</b></td><td>Détection de fuites</td><td>Contrôle d'étanchéité uniquement (pas de manipulation du fluide)</td></tr></table>
+<b>Processus d'obtention :</b>
+<div class="res-hl">1️⃣ <b>Formation</b> dans un centre agréé<br>
+2️⃣ <b>Évaluation théorique</b> (QCM) + <b>pratique</b> (mise en situation)<br>
+3️⃣ <b>Attestation d'aptitude</b> délivrée par un organisme évaluateur agréé<br>
+4️⃣ <b>Remise à niveau</b> obligatoire tous les <b>7 ans</b> (à partir de 2027)</div>
+<b>Attestation de capacité (entreprise) :</b>
+<div class="res-hl">Obligatoire pour toute entreprise manipulant des fluides frigorigènes. Délivrée par un organisme agréé. Renouvelable tous les <b>5 ans</b>.</div>`;
+
+CHAPTER_RESOURCES['ch4']=`
+<b>🧪 Chap. 4 — Fluides frigorigènes</b>
+<b>Tableau complet des fluides :</b>
+<table><tr><th>Fluide</th><th>Type</th><th>GWP</th><th>Sécurité</th></tr>
+<tr><td>R134a</td><td>HFC pur</td><td>1 430</td><td><span class="badge-a1">A1</span></td></tr>
+<tr><td>R410A</td><td>HFC mélange</td><td>2 088</td><td><span class="badge-a1">A1</span></td></tr>
+<tr><td>R404A</td><td>HFC mélange</td><td>3 922</td><td><span class="badge-a1">A1</span></td></tr>
+<tr><td>R407C</td><td>HFC zéotrope</td><td>1 774</td><td><span class="badge-a1">A1</span></td></tr>
+<tr><td>R32</td><td>HFC pur</td><td>675</td><td><span class="badge-a2l">A2L</span></td></tr>
+<tr><td>R290 (Propane)</td><td>HC naturel</td><td>3</td><td>A3</td></tr>
+<tr><td>R744 (CO₂)</td><td>Naturel</td><td>1</td><td><span class="badge-a1">A1</span></td></tr>
+<tr><td>R717 (NH₃)</td><td>Naturel</td><td>&lt;1</td><td>B2L</td></tr>
+<tr><td>R1234yf</td><td>HFO</td><td>4</td><td><span class="badge-a2l">A2L</span></td></tr>
+<tr><td>R1234ze</td><td>HFO</td><td>7</td><td><span class="badge-a2l">A2L</span></td></tr>
+<tr><td>R513A</td><td>HFO/HFC</td><td>631</td><td><span class="badge-a1">A1</span></td></tr>
+<tr><td>R448A</td><td>HFO/HFC</td><td>1 387</td><td><span class="badge-a1">A1</span></td></tr>
+<tr><td>R449A</td><td>HFO/HFC</td><td>1 397</td><td><span class="badge-a1">A1</span></td></tr></table>
+<b>Classification sécurité :</b>
+<table><tr><th>Classe</th><th>Signification</th><th>Exemples</th></tr>
+<tr><td><b>A1</b></td><td>Non inflammable, faible toxicité</td><td>R134a, R410A, R404A</td></tr>
+<tr><td><b>A2L</b></td><td>Légèrement inflammable</td><td>R32, R1234yf</td></tr>
+<tr><td><b>A2</b></td><td>Inflammable</td><td>R152a</td></tr>
+<tr><td><b>A3</b></td><td>Très inflammable</td><td>R290, R600a</td></tr>
+<tr><td><b>B1</b></td><td>Non inflammable, toxique</td><td>R123</td></tr>
+<tr><td><b>B2L</b></td><td>Légèrement inflammable, toxique</td><td>R717 (NH₃)</td></tr></table>
+<div class="res-hl"><b>Azéotrope</b> (ex: R410A) : se comporte comme un corps pur, glissement &lt; 0,2°C, charge liquide ou gazeuse.<br>
+<b>Zéotrope</b> (ex: R407C) : glissement ~7°C, charge en phase <b>liquide uniquement</b>.</div>
+<div class="res-hl"><b>Nomenclature :</b> R + (C−1)(H+1)(F) pour les HFC — ex: R32 = CH₂F₂ → 0 carbone en plus, 2+1=3 hydrogènes, 2 fluors</div>`;
+
+CHAPTER_RESOURCES['ch5']=`
+<b>❄️ Chap. 5 — Cycle frigorifique</b>
+<b>Les 4 organes principaux :</b>
+<img src="data:image/png;base64,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" style="max-width:100%;border-radius:8px;margin:.5rem 0" alt="Circuit frigorifique numéroté">
+<table><tr><th>N°</th><th>Organe</th><th>Rôle</th><th>État du fluide</th></tr>
+<tr><td>1</td><td><b>Compresseur</b></td><td>Aspire et comprime les vapeurs BP → HP</td><td>Vapeur BP → Vapeur HP</td></tr>
+<tr><td>2</td><td><b>Condenseur</b></td><td>Évacue la chaleur vers l'extérieur</td><td>Vapeur HP → Liquide HP</td></tr>
+<tr><td>3</td><td><b>Détendeur</b></td><td>Abaisse la pression du liquide</td><td>Liquide HP → Mélange BP</td></tr>
+<tr><td>4</td><td><b>Évaporateur</b></td><td>Absorbe la chaleur du milieu à refroidir</td><td>Mélange BP → Vapeur BP</td></tr></table>
+<b>Diagramme pression-enthalpie (Mollier) :</b>
+<img src="data:image/png;base64,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" style="max-width:100%;border-radius:8px;margin:.5rem 0" alt="Diagramme de Mollier">
+<div class="res-hl"><b>Surchauffe</b> = T° aspiration − T° évaporation saturée (typiquement 5 à 8 K)<br>
+<b>Sous-refroidissement</b> = T° condensation saturée − T° liquide sortie condenseur (typiquement 3 à 5 K)</div>`;
+
+CHAPTER_RESOURCES['ch6']=`
+<b>🔩 Chap. 6 — Composants & Accessoires</b>
+<b>Circuit complet avec symboles :</b>
+<img src="data:image/png;base64,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" style="max-width:100%;border-radius:8px;margin:.5rem 0" alt="Circuit avec symboles frigorifiques">
+<b>Rôle de chaque composant :</b>
+<table><tr><th>Composant</th><th>Rôle</th></tr>
+<tr><td><b>Filtre déshydrateur</b></td><td>Élimine humidité et impuretés du circuit (côté liquide)</td></tr>
+<tr><td><b>Voyant liquide</b></td><td>Vérifie l'état du fluide (bulles = manque de charge) et l'humidité (pastille verte = OK, jaune = humide)</td></tr>
+<tr><td><b>Électrovanne</b></td><td>Coupe l'arrivée de fluide à l'évaporateur (pump-down)</td></tr>
+<tr><td><b>Pressostat HP</b></td><td>Sécurité : coupe le compresseur si pression trop haute</td></tr>
+<tr><td><b>Pressostat BP</b></td><td>Régulation ou sécurité : coupe si pression trop basse</td></tr>
+<tr><td><b>Séparateur d'huile</b></td><td>Récupère l'huile entraînée par le fluide (refoulement compresseur)</td></tr>
+<tr><td><b>Bouteille anti-coups de liquide</b></td><td>Protège le compresseur contre les retours de liquide</td></tr></table>
+<b>Circuit d'huile :</b>
+<div class="res-hl"><b>Types :</b> POE (polyolester) pour HFC/HFO — Minérale pour CFC/HCFC<br>
+<b>Retour d'huile :</b> vitesse mini dans les conduites montantes (~6 m/s), piège à huile en pied de colonne, séparateur d'huile au refoulement.</div>`;
+
+CHAPTER_RESOURCES['ch7']=`
+<b>🔧 Chap. 7 — Manipulation des fluides</b>
+<b>Procédure tirage au vide (5 étapes) :</b>
+<div class="res-hl">
+1️⃣ <b>Raccorder</b> la pompe à vide au circuit via le manifold<br>
+2️⃣ <b>Mettre en route</b> la pompe à vide<br>
+3️⃣ <b>Atteindre</b> un vide &lt; 1 mbar (500 µ recommandé)<br>
+4️⃣ <b>Test de maintien</b> : isoler la pompe, attendre 30 min, le vide ne doit pas remonter<br>
+5️⃣ <b>Casser le vide</b> à l'azote sec (pas d'air !) puis recommencer
+</div>
+<b>Procédure charge en fluide (4 étapes) :</b>
+<div class="res-hl">
+1️⃣ Peser la bouteille sur une <b>balance électronique</b><br>
+2️⃣ Charger en <b>phase liquide</b> (zéotrope) ou liquide/gaz (azéotrope)<br>
+3️⃣ Vérifier <b>surchauffe</b> et <b>sous-refroidissement</b><br>
+4️⃣ Noter la charge exacte sur le <b>registre d'équipement</b>
+</div>
+<b>Procédure récupération (3 étapes) :</b>
+<div class="res-hl">
+1️⃣ Raccorder la <b>station de récupération</b> au circuit<br>
+2️⃣ Transférer <b>100%</b> du fluide dans la bouteille de récupération<br>
+3️⃣ <b>Peser</b> et <b>étiqueter</b> la bouteille (type de fluide, quantité, date)
+</div>
+<b>Brasage sous azote :</b>
+<table><tr><th>Type</th><th>Température</th><th>Usage</th></tr>
+<tr><td>Cuivre-phosphore</td><td>~730°C</td><td>Cuivre sur cuivre (pas sur laiton)</td></tr>
+<tr><td>Argent</td><td>~650°C</td><td>Cuivre sur laiton ou acier</td></tr></table>
+<b>Outils obligatoires :</b>
+<table><tr><th>Outil</th><th>Usage</th></tr>
+<tr><td>Balance électronique</td><td>Pesée de charge/récupération (précision ±5g)</td></tr>
+<tr><td>Manifold (manomètres)</td><td>Lecture des pressions HP/BP</td></tr>
+<tr><td>Pompe à vide</td><td>Tirage au vide du circuit</td></tr>
+<tr><td>Détecteur de fuites</td><td>Seuil mini 5 g/an</td></tr></table>`;
+
+CHAPTER_RESOURCES['ch8']=`
+<b>🔍 Chap. 8 — Contrôle & Détection de fuites</b>
+<b>Méthodes de détection :</b>
+<table><tr><th>Type</th><th>Méthode</th><th>Détails</th></tr>
+<tr><td rowspan="3"><b>Directe</b></td><td>Détecteur électronique</td><td>Seuil mini <b>5 g/an</b>, calibrage annuel obligatoire</td></tr>
+<tr><td>Lampe UV + traceur</td><td>Traceur fluorescent injecté dans le circuit</td></tr>
+<tr><td>Eau savonneuse</td><td>Bulles aux points de fuite (raccords, brasures)</td></tr>
+<tr><td rowspan="2"><b>Indirecte</b></td><td>Pression azote/azote-hélium</td><td>Maintien de pression pendant un temps donné</td></tr>
+<tr><td>Test sous vide</td><td>Le vide ne doit pas remonter (test de maintien)</td></tr></table>
+<div class="res-hl"><b>Seuil détecteur :</b> sensibilité minimale de <b>5 g/an</b> (norme EN 14624)</div>
+<b>Fréquences de contrôle :</b>
+<table><tr><th>tCO₂e</th><th>Sans détecteur fixe</th><th>Avec détecteur fixe</th></tr>
+<tr><td>5 – 50 t</td><td>Tous les 12 mois</td><td>Tous les 24 mois</td></tr>
+<tr><td>50 – 500 t</td><td>Tous les 6 mois</td><td>Tous les 12 mois</td></tr>
+<tr><td>&gt; 500 t</td><td>Tous les 3 mois</td><td>Tous les 6 mois</td></tr></table>
+<div class="res-hl"><b>En cas de fuite :</b><br>
+1️⃣ <b>Détecter</b> et localiser la fuite<br>
+2️⃣ <b>Réparer</b> dans un délai de <b>14 jours</b><br>
+3️⃣ <b>Recontrôler</b> l'étanchéité dans le <b>mois</b> suivant la réparation<br>
+4️⃣ <b>Documenter</b> dans le registre d'équipement</div>`;
+
+CHAPTER_RESOURCES['ch9']=`
+<b>📝 Chap. 9 — Traçabilité & Documentation</b>
+<b>Contenu obligatoire du registre d'équipement :</b>
+<table><tr><th>Information</th><th>Détails</th></tr>
+<tr><td>Identification</td><td>N° série, type d'équipement, localisation</td></tr>
+<tr><td>Fluide</td><td>Type de fluide, charge nominale (kg)</td></tr>
+<tr><td>Interventions</td><td>Date, nature (charge, fuite, récupération), quantité</td></tr>
+<tr><td>Contrôles</td><td>Date des contrôles d'étanchéité, résultats</td></tr>
+<tr><td>Opérateur</td><td>Nom, n° attestation d'aptitude</td></tr>
+<tr><td>Entreprise</td><td>Raison sociale, n° attestation de capacité</td></tr></table>
+<b>Fiche d'intervention CERFA 15497*04 :</b>
+<div class="res-hl">
+<b>Section 1 :</b> Identification de l'opérateur et de l'entreprise<br>
+<b>Section 2 :</b> Identification de l'équipement<br>
+<b>Section 3 :</b> Nature de l'intervention<br>
+<b>Section 4 :</b> Quantités de fluide (ajouté, récupéré)<br>
+<b>Section 5 :</b> Résultat du contrôle d'étanchéité<br>
+<b>Section 6 :</b> Signature de l'opérateur et du détenteur
+</div>
+<b>Déclarations ADEME :</b>
+<div class="res-hl">
+<b>Quand :</b> Annuellement, avant le 31 mars<br>
+<b>Comment :</b> Plateforme en ligne ADEME (déclaration dématérialisée)<br>
+<b>Quoi :</b> Quantités de fluides achetés, chargés, récupérés, détruits
+</div>
+<b>Conservation des documents :</b>
+<table><tr><th>Document</th><th>Durée</th></tr>
+<tr><td>Registre d'équipement</td><td><b>5 ans</b> après mise hors service</td></tr>
+<tr><td>Fiches d'intervention</td><td><b>5 ans</b></td></tr>
+<tr><td>BSD (Bordereau Suivi Déchets)</td><td><b>5 ans</b></td></tr>
+<tr><td>Attestation d'aptitude</td><td><b>7 ans</b> (validité)</td></tr></table>`;
+
+CHAPTER_RESOURCES['ch10']=`
+<b>♻️ Chap. 10 — Récupération & Fin de vie</b>
+<div class="res-hl"><b>Obligation :</b> Récupération de <b>100%</b> du fluide frigorigène avant toute intervention ou mise au rebut. Le dégazage volontaire est interdit et sanctionné (1 500 €).</div>
+<b>Recyclage, régénération, destruction :</b>
+<table><tr><th>Opération</th><th>Définition</th><th>Qui</th></tr>
+<tr><td><b>Recyclage</b></td><td>Filtration + déshydratation basique sur site</td><td>Frigoriste (Cat. I ou II)</td></tr>
+<tr><td><b>Régénération</b></td><td>Retraitement complet en usine pour retrouver les spécifications d'origine</td><td>Centre agréé uniquement</td></tr>
+<tr><td><b>Destruction</b></td><td>Incinération à haute température (&gt;1200°C)</td><td>Centre agréé DEEE</td></tr></table>
+<b>Bouteille de récupération :</b>
+<div class="res-hl">
+<b>Couleur :</b> Corps gris, collerette jaune<br>
+<b>Remplissage max :</b> 80% du volume (dilatation thermique)<br>
+<b>Étiquetage :</b> Type de fluide + quantité + date + nom opérateur<br>
+<b>Interdit :</b> Mélanger différents fluides dans une même bouteille !
+</div>
+<b>DEEE et BSD :</b>
+<div class="res-hl">
+<b>DEEE</b> : Déchets d'Équipements Électriques et Électroniques — filière de collecte obligatoire<br>
+<b>BSD</b> : Bordereau de Suivi des Déchets — traçabilité du fluide du producteur au destructeur<br>
+Conservation : <b>5 ans</b>
+</div>`;
+
+CHAPTER_RESOURCES['ch11']=`
+<b>🌿 Chap. 11 — Fluides naturels & A2L</b>
+<b>CO₂ (R744) :</b>
+<table><tr><th>Caractéristique</th><th>Valeur</th></tr>
+<tr><td>Pressions de service</td><td>&gt; 100 bar (transcritique ~120 bar)</td></tr>
+<tr><td>Risque principal</td><td>Asphyxie en espace confiné</td></tr>
+<tr><td>Seuil de détection</td><td>5 000 ppm (0,5%)</td></tr>
+<tr><td>Détection</td><td>Obligatoire dans les salles des machines</td></tr>
+<tr><td>GWP</td><td>1</td></tr></table>
+<b>NH₃ — Ammoniac (R717) :</b>
+<table><tr><th>Caractéristique</th><th>Valeur</th></tr>
+<tr><td>Seuil d'exposition</td><td>25 ppm (VME)</td></tr>
+<tr><td>Toxicité</td><td>Très toxique (classe B)</td></tr>
+<tr><td>Détection</td><td>Obligatoire + EPI spécifiques (masque, gants)</td></tr>
+<tr><td>GWP</td><td>&lt; 1</td></tr></table>
+<b>Hydrocarbures (R290, R600a) :</b>
+<div class="res-hl">
+<b>Classe :</b> A3 (très inflammables)<br>
+<b>Charges max :</b> limitées selon le type de local et la norme EN 378<br>
+<b>R290 :</b> max 150 g en domestique, ~1,5 kg en commercial (selon ventilation)
+</div>
+<b>A2L (R32, R1234yf, R1234ze) :</b>
+<div class="res-hl">
+<b>LII</b> (Limite Inférieure d'Inflammabilité) : concentration min pour inflammation<br>
+<b>Vitesse de propagation</b> de flamme ≤ 10 cm/s (faible)<br>
+<b>Ventilation</b> obligatoire dans les salles des machines<br>
+<b>Norme EN 378 :</b> charges max par type de local (occupation, ventilation)
+</div>`;
+
+CHAPTER_RESOURCES['ch12']=`
+<b>🛡️ Chap. 12 — Sécurité des interventions</b>
+<b>EPI par type d'intervention :</b>
+<table><tr><th>Intervention</th><th>EPI requis</th></tr>
+<tr><td><b>Brasage</b></td><td>Lunettes teintées, gants anti-chaleur, tablier ignifugé</td></tr>
+<tr><td><b>Manipulation fluide</b></td><td>Lunettes de protection, gants nitrile, chaussures de sécurité</td></tr>
+<tr><td><b>Travail électrique</b></td><td>Gants isolants, écran facial, tapis isolant, VAT</td></tr>
+<tr><td><b>NH₃ (ammoniac)</b></td><td>Masque à gaz (cartouche K), combinaison, douche de sécurité</td></tr></table>
+<b>Premiers secours — PAS :</b>
+<div class="res-hl">
+<b>P</b> = Protéger (couper l'énergie, baliser)<br>
+<b>A</b> = Alerter (15 SAMU, 18 Pompiers, 112 européen)<br>
+<b>S</b> = Secourir (gestes adaptés, PLS, ventiler)
+</div>
+<b>Habilitation B0V :</b>
+<div class="res-hl">
+<b>B0V :</b> Habilitation électrique pour exécutant non-électricien au voisinage de pièces nues sous tension BT<br>
+<b>DLVS</b> (Distance Limite de Voisinage Simple) : <b>3 m</b> en BT<br>
+<b>DLAP</b> (Distance Limite d'Approche Prudente) : <b>0,3 m</b> en BT
+</div>
+<b>Consignation électrique (4 étapes) :</b>
+<div class="res-hl">
+1️⃣ <b>Séparer</b> : ouvrir le sectionneur / disjoncteur<br>
+2️⃣ <b>Condamner</b> : cadenas + pancarte "NE PAS ENCLENCHER"<br>
+3️⃣ <b>VAT</b> : Vérification d'Absence de Tension (avec appareil adapté)<br>
+4️⃣ <b>MALT + CCT</b> : Mise À La Terre + Court-Circuit (si nécessaire en HT)
+</div>
+<b>Risques spécifiques :</b>
+<table><tr><th>Risque</th><th>Seuil / Règle</th></tr>
+<tr><td>ATEX (atmosphère explosive)</td><td>Zonage obligatoire si fluide inflammable (A2L, A3)</td></tr>
+<tr><td>Bruit</td><td>&gt; 85 dB(A) : protections auditives obligatoires</td></tr>
+<tr><td>Travail en hauteur</td><td>Harnais obligatoire si risque de chute &gt; 2 m</td></tr></table>`;
 
 // INIT
 buildGlossaire();renderLB();
