@@ -576,15 +576,15 @@ body{font-family:Calibri,'Segoe UI',system-ui,sans-serif;font-size:16px;backgrou
     <div class="fiche-panel" id="fiche-fluides">
       <div class="card">
         <h3>🧪 Tableau des fluides courants</h3>
-        <table class="ftable"><thead><tr><th>Fluide</th><th>Type</th><th>GWP</th><th>Statut</th></tr></thead><tbody>
-          <tr style="background:#d4edda"><td>R744 (CO₂)</td><td>Naturel</td><td>1</td><td>✅ Excellent</td></tr>
-          <tr style="background:#d4edda"><td>R290 (Propane)</td><td>Naturel</td><td>3</td><td>✅ Excellent (A3)</td></tr>
-          <tr style="background:#d4edda"><td>R717 (NH₃)</td><td>Naturel</td><td>&lt;1</td><td>✅ Toxique (B2L)</td></tr>
-          <tr style="background:#fffde7"><td>R32</td><td>HFC pur</td><td>675</td><td>✅ Faible GWP (A2L)</td></tr>
-          <tr style="background:#fff3cd"><td>R134a</td><td>HFC pur</td><td>1430</td><td>⚠️ Quotas UE</td></tr>
-          <tr style="background:#fff3cd"><td>R407C</td><td>HFC mélange</td><td>1774</td><td>⚠️ Zéotrope</td></tr>
-          <tr style="background:#fde8e6"><td>R410A</td><td>HFC mélange</td><td>2088</td><td>⚠️ Quotas UE</td></tr>
-          <tr style="background:#fde8e6"><td>R404A</td><td>HFC mélange</td><td>3922</td><td>❌ Interdit vierge</td></tr>
+        <table class="ftable"><thead><tr><th>Fluide</th><th>Type</th><th>GWP</th><th>Sécurité</th><th>Statut</th></tr></thead><tbody>
+          <tr style="background:#d4edda"><td>R744 (CO₂)</td><td>Naturel</td><td>1</td><td>A1</td><td>✅ GWP excellent — haute pression</td></tr>
+          <tr style="background:#d4edda"><td>R290 (Propane)</td><td>Naturel</td><td>3</td><td>A3</td><td>✅ GWP très bas — ⚠️ très inflammable</td></tr>
+          <tr style="background:#d4edda"><td>R717 (NH₃)</td><td>Naturel</td><td>0</td><td>B2L</td><td>✅ GWP nul — ⚠️ toxique + inflammable</td></tr>
+          <tr style="background:#fffde7"><td>R32</td><td>HFC pur</td><td>675</td><td>A2L</td><td>⚠️ GWP modéré — faiblement inflammable</td></tr>
+          <tr style="background:#fff3cd"><td>R134a</td><td>HFC pur</td><td>1430</td><td>A1</td><td>⚠️ Quotas UE / phase-down</td></tr>
+          <tr style="background:#fff3cd"><td>R407C</td><td>HFC mélange</td><td>1774</td><td>A1</td><td>⚠️ Zéotrope — quotas UE</td></tr>
+          <tr style="background:#fde8e6"><td>R410A</td><td>HFC mélange</td><td>2088</td><td>A1</td><td>⚠️ Quotas UE / phase-down</td></tr>
+          <tr style="background:#fde8e6"><td>R404A</td><td>HFC mélange</td><td>3922</td><td>A1</td><td>❌ Vierge interdit — régénéré OK jusqu'au 01/01/2030</td></tr>
         </tbody></table>
       </div>
     </div>
@@ -596,22 +596,22 @@ body{font-family:Calibri,'Segoe UI',system-ui,sans-serif;font-size:16px;backgrou
           <svg width="100%" height="170" viewBox="0 0 700 170">
             <text x="350" y="20" text-anchor="middle" font-size="13" font-weight="bold" fill="var(--navy)">⏰ Frise chronologique</text>
             <line x1="80" y1="80" x2="620" y2="80" stroke="var(--navy)" stroke-width="3"/>
-            <circle cx="120" cy="80" r="6" fill="#dc3545"/><text x="120" y="55" text-anchor="middle" font-size="14" font-weight="bold" fill="#dc3545">14j</text><text x="120" y="110" text-anchor="middle" font-size="10" fill="#333">Réparation fuite</text>
-            <circle cx="260" cy="80" r="6" fill="var(--orange)"/><text x="260" y="55" text-anchor="middle" font-size="14" font-weight="bold" fill="var(--orange)">30j</text><text x="260" y="110" text-anchor="middle" font-size="10" fill="#333">Déclaration install.</text>
+            <circle cx="120" cy="80" r="6" fill="#dc3545"/><text x="120" y="55" text-anchor="middle" font-size="14" font-weight="bold" fill="#dc3545">sans délai</text><text x="120" y="110" text-anchor="middle" font-size="10" fill="#333">Réparation fuite</text>
+            <circle cx="260" cy="80" r="6" fill="var(--orange)"/><text x="260" y="55" text-anchor="middle" font-size="14" font-weight="bold" fill="var(--orange)">1 mois</text><text x="260" y="110" text-anchor="middle" font-size="10" fill="#333">Re-contrôle</text>
             <circle cx="430" cy="80" r="6" fill="#17a2b8"/><text x="430" y="55" text-anchor="middle" font-size="14" font-weight="bold" fill="#17a2b8">5 ans</text><text x="430" y="110" text-anchor="middle" font-size="10" fill="#333">Conservation registre</text>
             <circle cx="580" cy="80" r="6" fill="#6f42c1"/><text x="580" y="55" text-anchor="middle" font-size="14" font-weight="bold" fill="#6f42c1">7 ans</text><text x="580" y="110" text-anchor="middle" font-size="10" fill="#333">Remise à niveau</text>
             <text x="80" y="145" font-size="10" fill="#999">Court terme</text><text x="580" y="145" font-size="10" fill="#999">Long terme</text>
           </svg>
         </div>
         <table class="ftable"><thead><tr><th>Action</th><th>Délai</th><th>Référence</th></tr></thead><tbody>
-          <tr><td>Réparation fuite</td><td><b>14 jours</b></td><td>Art. 9 UE 2024/573</td></tr>
-          <tr><td>Documentation contrôle</td><td><b>1 mois</b></td><td>Art. 10 UE 2024/573</td></tr>
-          <tr><td>Conservation registre</td><td><b>5 ans</b></td><td>Art. 10 UE 2024/573</td></tr>
-          <tr><td>Remise à niveau attestation</td><td><b>7 ans</b> (dès 2027)</td><td>Arrêté 21/11/2025</td></tr>
-          <tr><td>Déclaration installation</td><td><b>30 jours</b></td><td>Art. 10 UE 2024/573</td></tr>
+          <tr><td>Réparation d'une fuite</td><td><b>Sans retard injustifié</b></td><td>Art. 5 UE 2024/573</td></tr>
+          <tr><td>Re-contrôle après réparation</td><td><b>24 h à 1 mois</b></td><td>Art. 5 UE 2024/573</td></tr>
+          <tr><td>Contrôle d'étanchéité périodique</td><td>≥5 t : 12 mois · ≥50 t : 6 mois · ≥500 t : 3 mois</td><td>Art. 4 UE 2024/573</td></tr>
+          <tr><td>Conservation registre</td><td><b>5 ans</b></td><td>Art. 7 UE 2024/573</td></tr>
+          <tr><td>Attestation d'aptitude</td><td>remise à niveau avant le <b>12/03/2029</b> · nouvelle valable <b>7 ans</b></td><td>UE 2024/573</td></tr>
         </tbody></table>
         <div style="background:#d4edda;padding:.8rem;border-radius:8px;border-left:3px solid #28a745;margin-top:.8rem">
-          <b>✅ Moyen mnémotechnique :</b> 2 semaines (réparer) → 1 mois (déclarer) → 5 ans (conserver) → 7 ans (reformer)
+          <b>✅ Moyen mnémotechnique :</b> réparer sans délai → re-contrôler sous 1 mois → conserver 5 ans → renouveler l'attestation tous les 7 ans
         </div>
       </div>
     </div>
