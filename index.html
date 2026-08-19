@@ -223,7 +223,8 @@ body{font-family:Calibri,'Segoe UI',system-ui,sans-serif;font-size:16px;backgrou
       <span class="logo-badge">Édu</span>
     </div>
     <div class="topbar-stats">
-      <span id="userBadge" style="display:none;background:var(--orange3);color:var(--navy);font-weight:600">👤 <span id="userName"></span></span>
+<!-- (Badge nominatif retiré — version publique anonyme : aucune identité
+     saisie, stockée ni envoyée. Voir le bloc « résultats locaux » plus bas.) -->
       <span>📝 <span class="hi" id="gTotal">0</span> questions</span>
       <span>🏆 <span class="hi" id="gPct">0%</span></span>
       <button onclick="toggleAccessPanel()" style="background:none;border:2px solid rgba(255,255,255,.3);border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:1rem;color:#fff;display:flex;align-items:center;justify-content:center" title="Confort de lecture">Aa</button>
@@ -323,10 +324,10 @@ body{font-family:Calibri,'Segoe UI',system-ui,sans-serif;font-size:16px;backgrou
         <div style="font-size:.8rem;font-weight:600;color:var(--navy)">Évaluation</div>
         <div style="font-size:.7rem;color:var(--txt2)">Examen</div>
       </div>
-      <div style="text-align:center;cursor:pointer" onclick="go('classement')">
-        <div style="font-size:2rem">🏆</div>
-        <div style="font-size:.8rem;font-weight:600;color:var(--navy)">Classement</div>
-        <div style="font-size:.7rem;color:var(--txt2)">Scores</div>
+      <div style="text-align:center;cursor:pointer" onclick="go('stats')">
+        <div style="font-size:2rem">📊</div>
+        <div style="font-size:.8rem;font-weight:600;color:var(--navy)">Mes stats</div>
+        <div style="font-size:.7rem;color:var(--txt2)">sur cet appareil</div>
       </div>
     </div>
   </div>
@@ -713,27 +714,18 @@ body{font-family:Calibri,'Segoe UI',system-ui,sans-serif;font-size:16px;backgrou
     </div>
   </div>
 
-  <!-- ========== CLASSEMENT ========== -->
-  <div class="scr" id="s-classement">
-    <div class="card">
-      <h2>🏆 Classement</h2>
-      <div style="display:grid;grid-template-columns:2fr 1fr auto;gap:.5rem;margin-bottom:1rem;align-items:end">
-        <div><label style="font-size:.8rem;font-weight:600">Nom</label><input type="text" id="lbName" placeholder="Prénom" style="width:100%;padding:.4rem .6rem;border:2px solid var(--border);border-radius:8px"></div>
-        <div><label style="font-size:.8rem;font-weight:600">Note /20</label><input type="number" id="lbScore" min="0" max="20" step="0.5" placeholder="15" style="width:100%;padding:.4rem .6rem;border:2px solid var(--border);border-radius:8px"></div>
-        <button class="btn btn-orange btn-sm" onclick="addLBScore()">Ajouter</button>
-      </div>
-      <div id="lbList"></div>
-    </div>
-    <div class="card">
-      <h2>📤 Export résultats</h2>
-      <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.8rem">Téléchargez vos stats en CSV</p>
-      <button class="btn btn-primary" onclick="exportCSV()">📥 Exporter CSV</button>
-    </div>
-  </div>
+  <!-- (L'écran Classement a été retiré — version publique anonyme : plus
+       aucune saisie de nom, même locale. L'export CSV, anonyme par
+       construction, a rejoint l'écran Stats ci-dessous.) -->
 
   <!-- ========== STATS ========== -->
   <div class="scr" id="s-stats">
     <div class="card"><h2>📊 Statistiques globales</h2><div id="statsContent"></div></div>
+    <div class="card">
+      <h2>📤 Export résultats</h2>
+      <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.8rem">Téléchargez vos stats en CSV — par chapitre, sans aucune donnée personnelle</p>
+      <button class="btn btn-primary" onclick="exportCSV()">📥 Exporter CSV</button>
+    </div>
   </div>
 </div>
 
@@ -819,31 +811,10 @@ function updateTopbar(){
 }
 updateTopbar();
 
-// COLLECTEUR UNIVERSEL inerWeb
-const INERWEB_SHEET_URL='https://script.google.com/macros/s/AKfycbz5Bkn1tacs98bJezjnnYt38Yuy6QiHh7qWuEk1KRxS4UMIjl0yFOA0FVakLwCAJhZ5/exec';
-function inerwebSend(data){
-  data.timestamp=data.timestamp||new Date().toISOString();
-  if(data.note20==null&&data.score!=null) data.note20=Math.round(data.score/100*20*2)/2;
-  try{const r=JSON.parse(localStorage.getItem('inerweb-results')||'[]');r.push(data);localStorage.setItem('inerweb-results',JSON.stringify(r))}catch(e){}
-  return fetch(INERWEB_SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).catch(()=>{});
-}
-function getEleve(){
-  let e=JSON.parse(localStorage.getItem('fgaz_eleve')||'null');
-  if(!e){
-    const nom=prompt('Votre NOM :');if(!nom)return null;
-    const prenom=prompt('Votre PRÉNOM :');if(!prenom)return null;
-    const classe=prompt('Votre CLASSE :');if(!classe)return null;
-    e={nom:nom.trim().toUpperCase(),prenom:prenom.trim(),classe:classe.trim().toUpperCase()};
-    localStorage.setItem('fgaz_eleve',JSON.stringify(e));
-    document.getElementById('userName').textContent=e.prenom;
-    document.getElementById('userBadge').style.display='';
-  }
-  return e;
-}
-function sendFgazResult(type,zone,good,total,pct){
-  const eleve=getEleve();if(!eleve)return;
-  inerwebSend({module:'F-GAZ V6 — '+type,nom:eleve.nom,prenom:eleve.prenom,classe:eleve.classe,score:pct,detail:good+'/'+total+' ('+(CONFIG.zones[zone]||zone)+')'});
-}
+/* (Le « collecteur universel » a été retiré — version publique anonyme :
+   plus d'identité demandée (NOM/PRÉNOM/CLASSE), plus aucun envoi réseau
+   vers Google Apps Script. Le bilan reste à l'écran et les statistiques
+   sur l'appareil, rien ne sort du navigateur.) */
 
 // ============================================================
 // NAVIGATION
@@ -857,7 +828,6 @@ function go(id){
   if(id==='stats')buildStats();
   if(id==='quiz')buildQuizSelect();
   if(id==='glossaire')buildGlossaire();
-  if(id==='classement')renderLB();
   const calcBtn=document.getElementById('calcToggle');
   const calcW=document.getElementById('calcWidget');
   if(calcBtn){calcBtn.style.display=(id==='quiz'||id==='eval')?'block':'none'}
@@ -1064,7 +1034,6 @@ function showQResults(){
       <button class="btn btn-orange" onclick="startZoneQuiz('${quiz.zone}')">🔄 Recommencer</button>
       <button class="btn btn-primary" onclick="go('home')">🏠 Accueil</button>
     </div>`;
-  sendFgazResult("Quiz",quiz.zone,quiz.good,t,pctSimple);
 }
 
 // ============================================================
@@ -1139,7 +1108,6 @@ function showEResults(){
       <button class="btn btn-orange" onclick="startEval()">🔄 Recommencer</button>
       <button class="btn btn-primary" onclick="go('home')">🏠 Accueil</button>
     </div>`;
-  sendFgazResult("Évaluation","all",evl.good,t,pct);
 }
 
 // ============================================================
@@ -1406,21 +1374,9 @@ function showFlashResults(){
     <div class="results-actions"><button class="btn btn-orange" onclick="startFlash()">🔄 Recommencer</button><button class="btn btn-primary" onclick="go('home')">🏠 Accueil</button></div>`;
 }
 
-// CLASSEMENT
-function getLB(){try{return JSON.parse(localStorage.getItem('fgaz_lb')||'[]')}catch(e){return[]}}
-function saveLB(d){localStorage.setItem('fgaz_lb',JSON.stringify(d))}
-function addLBScore(){
-  const name=document.getElementById('lbName').value.trim(),score=parseFloat(document.getElementById('lbScore').value);
-  if(!name||isNaN(score)||score<0||score>20){alert('⚠️ Nom + note valide (0-20)');return}
-  const lb=getLB();lb.push({name,score,date:new Date().toISOString()});saveLB(lb);
-  document.getElementById('lbName').value='';document.getElementById('lbScore').value='';renderLB();
-}
-function renderLB(){
-  const lb=getLB().sort((a,b)=>b.score-a.score).slice(0,20);const el=document.getElementById('lbList');if(!el)return;
-  if(!lb.length){el.innerHTML='<div style="text-align:center;padding:1.5rem;color:var(--txt3)">🏆 Aucun score enregistré</div>';return}
-  el.innerHTML=lb.map((p,i)=>{const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1);
-    return `<div class="lb-row"><div class="lb-rank">${medal}</div><div class="lb-name">${p.name}</div><div class="lb-score">${p.score}/20</div><div class="lb-pct">${Math.round(p.score/20*100)}%</div></div>`}).join('');
-}
+/* (Le classement local par prénom a été retiré avec son écran — version
+   publique anonyme. L'export CSV ci-dessous ne contient que des taux
+   par chapitre, aucune donnée personnelle.) */
 
 // EXPORT CSV
 function exportCSV(){
@@ -1783,8 +1739,10 @@ CHAPTER_RESOURCES['ch12']=`
 <tr><td>Travail en hauteur</td><td>Harnais obligatoire si risque de chute &gt; 2 m</td></tr></table>`;
 
 // INIT
-buildGlossaire();renderLB();
-(function(){const e=JSON.parse(localStorage.getItem('fgaz_eleve')||'null');if(e){document.getElementById('userName').textContent=e.prenom;document.getElementById('userBadge').style.display=''}})();
+buildGlossaire();
+/* Nettoyage : purge des identités saisies par les versions antérieures —
+   elles ne servent plus à rien et n'ont pas à survivre sur l'appareil. */
+try{localStorage.removeItem('fgaz_eleve');localStorage.removeItem('fgaz_lb');localStorage.removeItem('inerweb-results')}catch(e){}
 
 </script>
 </body>
